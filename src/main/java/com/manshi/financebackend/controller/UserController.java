@@ -79,4 +79,13 @@ public class UserController {
     public ResponseEntity<?> getUsers(org.springframework.data.domain.Pageable pageable) {
         return ResponseEntity.ok(userService.getUsers(pageable));
     }
+    @RestController
+    @RequestMapping("/api")
+    public class TestController {
+
+        @GetMapping("/hello")
+        public String hello() {
+            return "Finance Backend is live!";
+        }
+    }
 }
