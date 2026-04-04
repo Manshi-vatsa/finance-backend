@@ -58,7 +58,22 @@ In Postman, add the following header to all subsequent requests:
 * **Value:** `Bearer <PASTE_YOUR_TOKEN_HERE>`
 
 ---
+### 4. Sample Data / Bootstrap Records
+To test the system quickly, the following sample users and financial records can be created:
 
+#### Users
+| Name        | Email              | Role    | Status |
+| ----------- | ----------------- | ------- | ------ |
+| Admin User  | admin@test.com     | ADMIN   | ACTIVE |
+| Analyst One | analyst@test.com   | ANALYST | ACTIVE |
+| Viewer One  | viewer@test.com    | VIEWER  | ACTIVE |
+
+#### Sample Financial Record
+| Amount | Type   | Category       | Date       | Notes                   |
+| ------ | ------ | -------------- | ---------- | ----------------------- |
+| 5000   | INCOME | Salary         | 2026-04-01 | April Salary Deposit    |
+| 1500   | EXPENSE| Groceries      | 2026-04-02 | Weekly groceries        |
+| 200    | EXPENSE| Utilities      | 2026-04-03 | Electricity Bill        |
 ## 🚀 Key APIs
 
 ### **User Management**
