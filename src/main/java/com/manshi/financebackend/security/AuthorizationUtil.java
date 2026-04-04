@@ -1,23 +1,38 @@
 package com.manshi.financebackend.security;
 
-import com.manshi.financebackend.entity.User;
-import com.manshi.financebackend.enums.Role;
-import com.manshi.financebackend.enums.Status;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.GrantedAuthority;
 
 public class AuthorizationUtil {
 
-    public static void checkAccess(User user, Role... allowedRoles) {
+    // ✅ CHECK IF CURRENT USER IS ADMIN
+    public static boolean isAdmin() {
 
-        if (user.getStatus() != Status.ACTIVE) {
-            throw new RuntimeException("User is inactive");
+        Authentication auth = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated()) {
+            return false;
         }
 
-        for (Role role : allowedRoles) {
-            if (user.getRole() == role) {
-                return;
+        if (auth.getAuthorities() == null) {
+            return false;
+        }
+
+        for (GrantedAuthority authority : auth.getAuthorities()) {
+            if ("ROLE_ADMIN".equals(authority.getAuthority())) {
+                return true;
             }
         }
 
-        throw new RuntimeException("Access Denied");
+        return false;
+    }
+
+    // ✅ GET CURRENT USER EMAIL
+    public static String getCurrentUserEmail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName();
     }
 }

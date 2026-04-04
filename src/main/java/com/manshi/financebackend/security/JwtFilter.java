@@ -21,6 +21,12 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        // ✅ SKIP LOGIN API (FIXED)
+        if (request.getServletPath().equals("/users/login")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         System.out.println("FILTER CALLED");
 
         String authHeader = request.getHeader("Authorization");
@@ -37,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 System.out.println("ROLE FROM TOKEN: " + role);
 
-                // ✅ FIX: Handle both ADMIN and ROLE_ADMIN safely
+                // ✅ Fix role format
                 String finalRole = role.startsWith("ROLE_") ? role : "ROLE_" + role;
 
                 SimpleGrantedAuthority authority =
@@ -53,7 +59,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (Exception e) {
-                e.printStackTrace(); // 🔥 ADD THIS
+                e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
