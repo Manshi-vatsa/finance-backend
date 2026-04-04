@@ -33,6 +33,11 @@ public class AuthorizationUtil {
     // ✅ GET CURRENT USER EMAIL
     public static String getCurrentUserEmail() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || auth.getPrincipal() == null) {
+            return null;
+        }
+
         return auth.getName();
     }
 }

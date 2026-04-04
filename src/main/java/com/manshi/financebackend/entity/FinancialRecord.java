@@ -2,6 +2,7 @@ package com.manshi.financebackend.entity;
 
 import com.manshi.financebackend.enums.RecordType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -23,11 +24,14 @@ public class FinancialRecord {
 
     private String category;
 
-    private LocalDate date;
 
     private String notes;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User createdBy;
+
+    @NotNull(message = "Date is required")
+    @Column(nullable = false)
+    private LocalDate date;
 }

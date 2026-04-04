@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.context.annotation.Profile;   // ✅ ADD THIS
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+@Profile("!test")   // ✅ ADD THIS LINE (VERY IMPORTANT)
 public class JwtFilter extends OncePerRequestFilter {
 
     @Override
@@ -21,7 +23,6 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // ✅ SKIP LOGIN API (FIXED)
         if (request.getServletPath().equals("/users/login")) {
             filterChain.doFilter(request, response);
             return;
@@ -43,7 +44,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 System.out.println("ROLE FROM TOKEN: " + role);
 
-                // ✅ Fix role format
                 String finalRole = role.startsWith("ROLE_") ? role : "ROLE_" + role;
 
                 SimpleGrantedAuthority authority =

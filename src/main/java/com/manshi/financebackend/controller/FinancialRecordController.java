@@ -6,6 +6,7 @@ import com.manshi.financebackend.enums.RecordType;
 import com.manshi.financebackend.security.AuthorizationUtil;
 import com.manshi.financebackend.service.FinancialRecordService;
 import com.manshi.financebackend.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +24,30 @@ public class FinancialRecordController {
     private final FinancialRecordService service;
     private final UserService userService;
 
-    // ✅ ADMIN ONLY → Create
+    // ✅ ADMIN ONLY → Create (VALIDATION ADDED)
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<FinancialRecord> create(@RequestBody FinancialRecord record) {
+    public ResponseEntity<?> create(@Valid @RequestBody FinancialRecord record) {
 
         String email = AuthorizationUtil.getCurrentUserEmail();
+
+        if (email == null) {
+            return ResponseEntity.status(401).body("Unauthorized: No user found");
+        }
+
         User user = userService.findByEmail(email);
 
+        if (user == null) {
+            return ResponseEntity.status(404).body("User not found");
+        }
+
+        // ✅ Attach creator
         record.setCreatedBy(user);
+
+        // ✅ Optional fallback (extra safety)
+        if (record.getDate() == null) {
+            record.setDate(LocalDate.now());
+        }
 
         return ResponseEntity.ok(service.createRecord(record));
     }
@@ -51,8 +67,14 @@ public class FinancialRecordController {
     // ✅ ADMIN ONLY → Update
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<FinancialRecord> update(@PathVariable Long id,
-                                                  @RequestBody FinancialRecord record) {
+    public ResponseEntity<?> update(@PathVariable Long id,
+                                    @Valid @RequestBody FinancialRecord record) {
+
+        // ✅ Safety: prevent null date during update
+        if (record.getDate() == null) {
+            return ResponseEntity.badRequest().body("Date cannot be null");
+        }
+
         return ResponseEntity.ok(service.updateRecord(id, record));
     }
 
