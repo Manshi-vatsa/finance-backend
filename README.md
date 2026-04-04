@@ -73,3 +73,14 @@ JDBC: `jdbc:h2:mem:testdb`
 * Production-level API practices
 
 ---
+## 🧠 Design Decisions
+- Used JWT for stateless authentication and secure API access
+- Implemented role-based access using Spring Security annotations and logic checks
+- Followed layered architecture (Controller → Service → Repository) for clean separation of concerns
+- Used global exception handling for consistent error responses
+- Chose H2 in-memory database for simplicity and quick testing
+
+## ⚖️ Assumptions
+- First user is created as ADMIN if no users exist
+- Viewer has read-only access, Analyst has limited access, Admin has full control
+- System is designed for demonstration and can be extended to production-grade DB
