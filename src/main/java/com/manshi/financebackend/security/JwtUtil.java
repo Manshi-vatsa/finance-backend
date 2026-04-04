@@ -19,13 +19,13 @@ public class JwtUtil {
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-                .signWith(key, SignatureAlgorithm.HS256) // ✅ FIXED
+                .signWith(key, SignatureAlgorithm.HS256) //
                 .compact();
     }
 
     public static Claims extractClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key) // ✅ SAME key used here
+                .setSigningKey(key) //
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
