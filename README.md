@@ -74,6 +74,11 @@ To test the system quickly, the following sample users and financial records can
 | 5000   | INCOME | Salary         | 2026-04-01 | April Salary Deposit    |
 | 1500   | EXPENSE| Groceries      | 2026-04-02 | Weekly groceries        |
 | 200    | EXPENSE| Utilities      | 2026-04-03 | Electricity Bill        |
+
+
+#### H2 Console Screenshot
+![H2 Console showing Users and Financial Records](images/h2_console.png)
+*H2 database showing sample users and financial records.*
 ## 🚀 Key APIs
 
 ### **User Management**
@@ -93,6 +98,10 @@ To test the system quickly, the following sample users and financial records can
 
 ---
 
+
+#### Swagger UI Screenshot
+![Swagger UI showing all endpoints](images/swagger_ui.png)
+*Swagger UI listing all available APIs for testing.*
 ## 🛠 Tech Stack
 * **Java 17+** & **Spring Boot 3.x**
 * **Security:** Spring Security & JWT
