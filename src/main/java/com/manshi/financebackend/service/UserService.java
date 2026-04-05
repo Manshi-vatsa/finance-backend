@@ -1,7 +1,9 @@
 package com.manshi.financebackend.service;
 
 import com.manshi.financebackend.entity.User;
+import com.manshi.financebackend.enums.Role;
 import com.manshi.financebackend.repository.UserRepository;
+import com.manshi.financebackend.security.AuthorizationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,18 @@ public class UserService {
 
     // ✅ Create user with encrypted password
     public User createUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        long adminCount = userRepository.countByRole(Role.ADMIN);
+
+        if (adminCount == 0) {
+            // ✅ First admin allowed without auth
+            return userRepository.save(user);
+        }
+
+// ✅ After that → only ADMIN allowed
+        if (!AuthorizationUtil.isAdmin()) {
+            throw new RuntimeException("Only ADMIN can create users");
+        }
+
         return userRepository.save(user);
     }
 
