@@ -24,12 +24,13 @@ public class UserService {
     public User createUser(User user) {
         long adminCount = userRepository.countByRole(Role.ADMIN);
 
+        // 🔥 ADD THIS LINE (MOST IMPORTANT)
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         if (adminCount == 0) {
-            // ✅ First admin allowed without auth
             return userRepository.save(user);
         }
 
-// ✅ After that → only ADMIN allowed
         if (!AuthorizationUtil.isAdmin()) {
             throw new RuntimeException("Only ADMIN can create users");
         }
